@@ -1,0 +1,26 @@
+body{
+	background-color: #fff0f0;
+	text-align: center;
+}
+
+
+h3{
+	color: blue;
+}
+
+#header{
+	margin: auto;
+	background-color: #ffe6e6;
+	width: 85%;
+	height: 30%;
+}
+
+/*
+#ffe3e3
+#ffe6e6
+#ffe8e8
+#ffebeb
+#ffeded
+#fff0f0
+#fff2f2
+*/
