@@ -1,18 +1,79 @@
 body{
-	background-color: #fff0f0;
+	background-image: url('/images/background.png');
 	text-align: center;
+	background-repeat: repeat-y;
+	background-size:100%;
 }
 
-
-h3{
-	color: blue;
-}
 
 #header{
 	margin: auto;
-	background-color: #ffe6e6;
+	background-color: #333333;
 	width: 85%;
-	height: 30%;
+	height: 20%;
+	margin-left: 7.5%;
+	position: absolute;
+}
+
+#titleImage{
+	float: left;
+	display: inline;
+	background-color: #ffe3e3;
+	height: 15%;
+	width:20%;
+	margin-left:10%;
+	margin-right:5%;
+	position:relative;
+	margin-top:2%;
+}
+
+#headImage{
+	color:white;
+	float: right;
+	display:inline;
+	background-color: black;
+	height: 15%;
+	width: 50%;
+	margin-left:5%;
+	margin-right:10%;
+	margin-top:2%;
+	position:relative;
+}
+
+#linksBar{
+	float:left;
+	background-color: #555555;
+	width:85%;
+	position:relative;
+	margin-top:3%;
+	margin-left:7.5%;
+	border-color:black;
+	border-style:solid;
+	border-width:1px;
+}
+
+.link{
+	color:green;
+	float:left;
+	display:inline;
+	margin-right:7.5%;
+	margin-left:7.5%;
+	width:5%;
+	background-color:#555666;
+	border-style:solid;
+	border-width:1px;
+	border-color:black;
+	
+}
+
+#contentPane{
+	position: absolute;
+	background-color: #333333;
+	width:85%;
+	margin-top:12%;
+	float:bottom;
+	margin-left:7.5%;
+	height:90%;
 }
 
 /*
