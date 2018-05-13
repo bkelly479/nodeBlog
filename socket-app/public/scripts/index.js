@@ -2,7 +2,7 @@
 
 
 
-
+//Event Listeners for header
 document.getElementById('home').addEventListener('click', function(){
 	window.location = 'index.html';
 });
