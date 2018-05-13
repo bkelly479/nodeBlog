@@ -1,6 +1,6 @@
 body{
 	background-image: url('/images/background.png');
-	text-align: center;
+	text-align:center;
 	background-repeat: repeat-y;
 	background-size:100%;
 	display: grid;
@@ -22,6 +22,7 @@ img{
 	grid-gap: 1em;
 	grid-auto-rows:minmax(100px, auto);
 	padding: 1em;
+	
 }
 
 #titleImage{
@@ -50,9 +51,7 @@ img{
 	grid-gap: 1em;
 	margin:1em;
 	grid-auto-rows:minmax(50px, auto);
-	border-style:solic;
-	border-color:black;
-	border-width:1em;
+	
 	
 	
 }
@@ -69,37 +68,18 @@ img{
 #contentPane{
 	background-color: white;
 	display: grid;
-	grid-template-columns:repeat(3, 1fr);
+	grid-template-columns:1fr;
 	grid-gap:2em;
 	grid-auto-rows:minmax(5em, auto);
 	padding:1em;
 }
 
-.article{
-	display:grid;
-	grid-template-rows:2fr 1fr 2fr;
-	grid-auto-rows:minmax(2em, auto);
-	
+#loginForm{
+	grid-template-columns:1fr 1fr;
+	grid-gap:1em;
 }
 
-.articleImg{
-	background-color:white;
-	justify-self:center;
-}
 
-.articleTitle{
-	background-color:whitesmoke;
-	color:darkGray;
-	justify-self:center;
-	border-bottom-style:solid;
-	border-bottom-color: black;
-	border-bottom-width: 1em;
-}
-
-.articleDescript{
-	background-color:white;
-	justify-self:center;
-}
 
 
 @media only screen 

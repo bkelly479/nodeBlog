@@ -50,9 +50,7 @@ img{
 	grid-gap: 1em;
 	margin:1em;
 	grid-auto-rows:minmax(50px, auto);
-	border-style:solic;
-	border-color:black;
-	border-width:1em;
+
 	
 	
 }
