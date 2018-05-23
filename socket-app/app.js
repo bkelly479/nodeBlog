@@ -7,6 +7,9 @@ require('dotenv').config();
 var expressValidator = require('express-validator');
 var hbs = require('express-handlebars');
 var engines = require('consolidate');
+var bcrypt = require('bcrypt');
+
+var saltRounds = 10;
 
 
 app.use(bodyParser.urlencoded({
@@ -22,6 +25,7 @@ app.engine('hbs', engines.handlebars);
 app.set('view engine', 'hbs');
 
 
+//used to handle registration errors
 var regErrors = require('./errorHandlers/regErrorHandler');
 
 //establish database connection with credentials specified in .env file
@@ -79,6 +83,9 @@ app.post('/register', function(req, res, next){
 		
 		//res.send('errors: ' + JSON.stringify(errors));
 		
+		
+		//writes all errors to an seperate file in the errorHandlers directory
+		//these are later read and sent back to the client in the error check rout
 		regErrors.errorsToHandle = JSON.stringify(errors);
 		
 		
@@ -90,21 +97,24 @@ app.post('/register', function(req, res, next){
 		const username = req.body.username;
 		const email = req.body.email;
 		const pass = req.body.password;
-	
-		connection.query('INSERT INTO users(username,emailAddress,passHash) VALUES(?, ?, ?)', [username,email,pass], function(error, results, fields){
-			if (error){
+		
+		bcrypt.hash(pass, saltRounds, function(err, hash){
+			
+			connection.query('INSERT INTO users(username,emailAddress,passHash) VALUES(?, ?, ?)', [username,email,hash], function(error, results, fields){
 				
-				console.log(error);
-				
-				
-				
-				
-			};
+				if (error){
+					
+					console.log(error);
+					
+					//if there are no errors after the new user is inserted into the database
+					//send the user back to the main page
+					res.render('index.html');	
+				};
+			});
+		
 		});
 	
-	//if there are no errors after the new user is inserted into the database
-	//send the user back to the main page
-	res.render('index.html');
+		
 	
 	};
 });
@@ -114,6 +124,8 @@ app.get('/login', function(req, res, next){
 	console.log('login requested');
 });
 
+
+//send errors to client
 app.get('/errorCheck', function(req, res, next){
 	res.send(regErrors.errorsToHandle);
 	

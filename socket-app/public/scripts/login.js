@@ -1,24 +1,26 @@
 
 document.getElementById('home').addEventListener('click', function(){
-	window.location = 'index.hbs';
+	window.location = 'index.html';
 });
 
 document.getElementById('article').addEventListener('click', function(){
-	window.location = 'articles.hbs';
+	window.location = 'articles.html';
 	
 });
 
 document.getElementById('writers').addEventListener('click', function(){
-	window.location = "writers.hbs";
+	window.location = "writers.html";
 	
 });
 
 document.getElementById('login').addEventListener('click', function(){
-	window.location = "login.hbs";
+	window.location = "login.html";
 	
 });
 
 
+//server call to check for errors, errors are processed in the registration post rout and added to a seperate error handling file
+//on window load the page checksif anything had been added to the error file and displays the errors
 function errorCheck(){
 	var errorForm = document.getElementById("errorForm");
 	
@@ -45,6 +47,7 @@ function errorCheck(){
 	});
 };
 
+//call error check on page load
 window.onload = function(){
 	errorCheck();
 };

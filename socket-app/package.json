@@ -9,6 +9,7 @@
   "author": "Krendan",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "consolidate": "^0.15.1",
     "dotenv": "^5.0.1",

@@ -1,18 +1,20 @@
+
+//event handlers for links bar
 document.getElementById('home').addEventListener('click', function(){
-	window.location = 'index.hbs';
+	window.location = 'index.html';
 });
 
 document.getElementById('article').addEventListener('click', function(){
-	window.location = 'articles.hbs';
+	window.location = 'articles.html';
 	
 });
 
 document.getElementById('writers').addEventListener('click', function(){
-	window.location = "writers.hbs";
+	window.location = "writers.html";
 	
 });
 
 document.getElementById('login').addEventListener('click', function(){
-	window.location = "login.hbs";
+	window.location = "login.html";
 	
 });
