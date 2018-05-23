@@ -5,7 +5,7 @@
 
 
 	<head>
-		<title>Log in</title>
+		<title>login</title>
 		
 		<link rel="stylesheet" type = "text/css" href="style/login.css">
 		
@@ -30,19 +30,19 @@
 			
 				
 				<div class='link' id='home'>
-					<p>Home</p>
+					<a href="index.html">Home</a>
 				</div>
 				
 				<div class='link' id='article'>
-					<p>Articles</p>
+					<a href="articles.html">Articles</a>
 				</div>
 				
 				<div class='link' id='writers'>
-					<p>Writers</p>
+					<a href="writers.html">Writers</a>
 				</div>
 				
 				<div class='link' id='login'>
-					<p>Log In</p>
+					<a href="login.html">Login</a>
 				</div>
 				
 				
@@ -51,7 +51,20 @@
 		</div>
 		
 		<div id='contentPane' >
-		
+			<div id='errorForm'>
+				<script id="errorsHBS" type="x-handlebars-template">
+					
+						{{#if errors}}
+							{{#each errors}}
+								<p class='errorMessage'>
+								{{this.msg}}
+								
+							{{/each}}
+						{{/if}}
+					
+				</script>
+			</div>
+			
 			<form id='loginForm' method='POST' action='/register'>
 				
 				<p>Email: </p><input type ="text" name="email" id='email' class='loginInput'>
@@ -63,7 +76,7 @@
 				<p>Confirm Password: </p><input type ="password" name="confirmPass" id='confirmPassword' class='loginInput'>
 				<br>
 				<br>
-				<input type='submit' value='Submit'>
+				<input type='submit' value='Submit' id='submit'>
 				
 				
 				
@@ -74,10 +87,12 @@
 			
 			
 			
+			
 		</div>
 		
 		
 		<script src="scripts/login.js"></script>
+		
 		
 	</body>
 </html>

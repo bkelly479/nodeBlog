@@ -79,7 +79,15 @@ img{
 	grid-gap:1em;
 }
 
+#errorForm{
+	grid-template-columns:1fr;
+	grid-gap: 0;
+}
 
+.errorMessage{
+	color:red;
+	font-size:10px;
+}
 
 
 @media only screen 
