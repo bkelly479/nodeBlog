@@ -9,24 +9,50 @@ var hbs = require('express-handlebars');
 var engines = require('consolidate');
 var bcrypt = require('bcrypt');
 
+
+var multer = require('multer');
+
+const storage = multer.diskStorage({
+	destination: function(req, file, cb){
+		cb(null, 'public/images/uploads/');
+	},
+	filename: function(req, file, cb){
+		cb(null, Math.random().toString(36).substr(2, 9)+ '-' + file.originalname);
+	}
+})
+
+
+var upload = multer({storage: storage});
+
+//salt rounds for hashing
 var saltRounds = 10;
 
 
+
+
+//body parser setup allows error checking
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
 app.use(bodyParser.json());
 
+
+//validator
 app.use(expressValidator());
 
 
+//render engine
 app.engine('html', engines.handlebars);
 app.engine('hbs', engines.handlebars);
 app.set('view engine', 'hbs');
 
 
-//used to handle registration errors
+
+
+//used to handle post errors
 var regErrors = require('./errorHandlers/regErrorHandler');
+var articleErrors = require('./errorHandlers/articleErrorHandler');
+var authorErrors = require('./errorHandlers/authorErrorHandler');
 
 //establish database connection with credentials specified in .env file
 var connection = mysql.createConnection({
@@ -47,9 +73,32 @@ app.use(express.static('views'));
 
 //default path, sends index html
 app.get('/', function (req, res,next) {
+	
+	console.log(req.isAuthenticated());
+	console.log(req.user);
+	
+	console.log('auth');
+	
 	res.render('index.html');
 	
 });
+
+//Authentification packages
+var session = require('express-session');
+var passport = require('passport');
+
+
+app.use(session({
+	secret: 'aahhtisonvjkeusa',
+	resave: false,
+	saveUninitialized: false,
+	name: 'nodeBlogCookie'
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 //registration handling 
 app.post('/register', function(req, res, next){
@@ -105,11 +154,38 @@ app.post('/register', function(req, res, next){
 				if (error){
 					
 					console.log(error);
+				}else{
 					
-					//if there are no errors after the new user is inserted into the database
-					//send the user back to the main page
-					res.render('index.html');	
-				};
+					connection.query('SELECT LAST_INSERT_ID() as user_id', function(error, results, fields){
+						
+						
+						
+						if(error){
+							console.log(error);
+						}else{
+							
+							//console.log(results[0]);
+							
+							const userID = results[0];
+							
+							console.log(results[0]);
+							
+							req.login(results[0], function(err){
+								if(err){
+									console.log(err);
+								}
+								res.redirect('/');
+								console.log('redirected');
+							});
+							
+							//if there are no errors after the new user is inserted into the database
+							//send the user back to the main page
+							//res.render('index.html');	
+						};
+					});
+				}
+					
+					
 			});
 		
 		});
@@ -119,21 +195,158 @@ app.post('/register', function(req, res, next){
 	};
 });
 
+
+
 app.get('/login', function(req, res, next){
+	
+	console.log(req.isAuthenticated());
 	res.render('login.html', {layout:false});
 	console.log('login requested');
 });
 
+//article upload page
+app.get('/upload', function(req, res, next){
+	res.render('uploadArticle.html');
+	
+});
 
-//send errors to client
+
+//article upload handler
+app.post('/uploadArticle', function(req, res, next){
+	
+	//article validation rules
+	req.checkBody('articleText', 'Article text field cannot be empty.').notEmpty();
+	req.checkBody('articleDescript', 'Article discription field cannot be empty.').notEmpty();
+	req.checkBody('date', 'Date field cannot be empty.').notEmpty();
+	req.checkBody('pic', 'Must upload a picture.').notEmpty();
+	
+	//check for errors
+	
+	const errors = req.validationErrors();
+	
+	
+	//current error handling 
+	if(errors){
+		console.log('errors: ' + JSON.stringify(errors));
+		
+		
+		//writes all errors to an seperate file in the errorHandlers directory
+		//these are later read and sent back to the client in the error check rout
+		articleErrors.articleErrorsToHandle = JSON.stringify(errors);
+		
+		
+		res.render('uploadArticle.html', {
+			title:'Registration error',
+			errors: 'error occured'
+		});
+	}
+	else{
+		const author = req.body.author;
+		const articleText = req.body.articleText;
+		const articleDescript = req.body.articleDescript;
+		const date = req.body.date;
+		const pic = req.body.pic;
+		
+	};
+});
+
+//send article errors to client
+app.get('/articleErrorCheck', function(req, res, next){
+	
+	res.send(articleErrors.articleErrorsToHandle);
+	
+	articleErrors.articleErrorsToHandle = null;
+	
+});
+
+
+
+//send registration errors to client
 app.get('/errorCheck', function(req, res, next){
 	res.send(regErrors.errorsToHandle);
 	
 	regErrors.errorsToHandle = null;
-	console.log('');
-	console.log('');
-	console.log(regErrors.errorsToHandle);
 });
+
+
+app.get('/addAuthor', function(req, res, next){
+	res.render('addAuthor.html');
+});
+
+app.get('/authorErrorCheck', function(req, res, next){
+	
+	res.send(authorErrors.authorErrorsToHandle);
+	
+	authorErrors.authorErrorsToHandle = null;
+	
+});
+
+app.post('/addAuthor', upload.single('Authorpic'), function(req, res, next){
+	console.log(req.body.authorName);
+	console.log(req.body.authorDescript);
+	console.log(req.body.Authorpic);
+	
+	console.log(req.file);
+	
+	
+	//article validation rules
+	req.checkBody('authorName', 'Author name field cannot be empty.').notEmpty();
+	req.checkBody('authorDescript', 'Author discription field cannot be empty.').notEmpty();
+	//req.checkBody('Authorpic', 'Must upload a picture.').notEmpty();
+	
+	//check for errors
+	
+	const errors = req.validationErrors();
+	
+	
+	//current error handling 
+	if(errors){
+		console.log('errors: ' + JSON.stringify(errors));
+		
+		
+		//writes all errors to an seperate file in the errorHandlers directory
+		//these are later read and sent back to the client in the error check rout
+		authorErrors.authorErrorsToHandle = JSON.stringify(errors);
+		
+		
+		res.render('addAuthor.html', {
+			title:'Registration error',
+			errors: 'error occured'
+		});
+	}else{
+		var name = req.body.authorName;
+		var descrpt = req.body.authorDescript;
+		var imgPath = req.file.filename;
+		
+		connection.query('INSERT INTO author(NAME,IMGLOC,DESCRPT) VALUES(?,?,?)',[name,imgPath,descrpt], function(error,results,field){
+			
+			if(error){
+				console.log(error.code);
+				
+			}
+			connection.release
+			
+			console.log('author Added');
+		});
+	}
+	
+	res.render('addAuthor.html');
+	
+	
+});
+
+//var User = require('.../app/modles/user');
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+	User.findById(id, function(err, user){
+		done(null, user);
+	})
+});
+
+
 
 
 //start server

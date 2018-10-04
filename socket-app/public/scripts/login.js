@@ -36,7 +36,7 @@ function errorCheck(){
 			//console.log(dataJSON);
 			//console.log("recieved back:" + data);
 			
-			console.log(dataJSON.length);
+			console.log('Number Of Errors: ' + dataJSON.length);
 			
 			for(var i = 0; i < dataJSON.length; i++){
 				errorForm.innerHTML = errorForm.innerHTML + "<p class='errorMessage'>" + dataJSON[i].msg + "</p>"

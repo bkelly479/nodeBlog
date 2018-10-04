@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+	<head>
+		<title>Upload Article</title>
+		
+		<link rel="stylesheet" type = "text/css" href="style/addAuthor.css">
+	</head>
+	
+	<body >
+	
+		<div id='header'>
+			
+			<div id='titleImage'>
+				<img src='images/logo.png'></img>
+				
+			</div>
+			
+			<div id='headImage'>
+				<p>headImage</p>
+				
+			</div>
+			
+			<div id='linksBar'>
+			
+				
+				<div class='link' id='home'>
+					<a href="index.html">Home</a>
+				</div>
+				
+				<div class='link' id='article'>
+					<a href="articles.html">Articles</a>
+				</div>
+				
+				<div class='link' id='writers'>
+					<a href="writers.html">Writers</a>
+				</div>
+				
+				<div class='link' id='login'>
+					<a href="login.html">Login</a>
+				</div>
+				
+				
+			</div>
+			
+		</div>
+		
+		<div id='contentPane'>
+		
+			<div id='errorForm'>
+				<script id="errorsHBS" type="x-handlebars-template">
+					
+						{{#if errors}}
+							{{#each errors}}
+								<p class='errorMessage'>
+								{{this.msg}}
+								
+							{{/each}}
+						{{/if}}
+					
+				</script>
+			</div>
+		
+			<form id='uploadForm' method='POST' action='/addAuthor' enctype="multipart/form-data">
+			
+				
+				<p>Author Name:</p><input name='authorName' id='authorName' class='uploadInput'></input>
+				
+				<p>Author Description:</p><textarea name='authorDescript' id='authorDescript' class='uploadInput' rows='10'></textarea>
+				
+				<p>Author Image:</p><input type='file' name='Authorpic' id='Authorpic' accept='image/*'>
+				
+				<br>
+				<br>
+				<input type='submit' value='Submit' id='submit'>
+				
+				
+				
+				
+				
+				
+			</form>
+			
+		</div>
+		
+		
+		<script src="scripts/addAuthor.js"></script>
+		
+	</body>
+</html>

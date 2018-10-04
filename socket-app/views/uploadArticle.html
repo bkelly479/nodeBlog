@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+
+
+
+	<head>
+		<title>Upload Article</title>
+		
+		<link rel="stylesheet" type = "text/css" href="style/uploadArticle.css">
+	</head>
+	
+	<body >
+	
+		<div id='header'>
+			
+			<div id='titleImage'>
+				<img src='images/logo.png'></img>
+				
+			</div>
+			
+			<div id='headImage'>
+				<p>headImage</p>
+				
+			</div>
+			
+			<div id='linksBar'>
+			
+				
+				<div class='link' id='home'>
+					<a href="index.html">Home</a>
+				</div>
+				
+				<div class='link' id='article'>
+					<a href="articles.html">Articles</a>
+				</div>
+				
+				<div class='link' id='writers'>
+					<a href="writers.html">Writers</a>
+				</div>
+				
+				<div class='link' id='login'>
+					<a href="login.html">Login</a>
+				</div>
+				
+				
+			</div>
+			
+		</div>
+		
+		<div id='contentPane'>
+		
+			<div id='errorForm'>
+				<script id="errorsHBS" type="x-handlebars-template">
+					
+						{{#if errors}}
+							{{#each errors}}
+								<p class='errorMessage'>
+								{{this.msg}}
+								
+							{{/each}}
+						{{/if}}
+					
+				</script>
+			</div>
+		
+			<form id='uploadForm' method='POST' action='/uploadArticle'>
+				
+				<p>Author: </p><select name='author' id='author' class='uploadInput'>
+					<option value='Jim'>Jim</option>
+					<option value='Bob'>Bob</option>
+					<option value='Nick'>Nick</option>
+				</select>
+				
+				<p>Article Text:</p><textarea name='articleText' id='articleText' class='uploadInput' rows='20'></textarea>
+				
+				<p>Article Description:</p><textarea name='articleDescript' id='articleDescript' class='uploadInput' rows='10'></textarea>
+				
+				<p>Date:</p><input type='date' name='date' id='date' class='uploadInput'>
+				
+				<p>Article Image:</p><input type='file' name='pic' id='pic' accept='image/*'>
+				
+				<br>
+				<br>
+				<input type='submit' value='Submit' id='submit'>
+				
+				
+				
+				
+				
+				
+			</form>
+			
+		</div>
+		
+		
+		<script src="scripts/uploadArticle.js"></script>
+		
+	</body>
+</html>
