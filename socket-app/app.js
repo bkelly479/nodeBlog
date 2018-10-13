@@ -8,6 +8,7 @@ var expressValidator = require('express-validator');
 var hbs = require('express-handlebars');
 var engines = require('consolidate');
 var bcrypt = require('bcrypt');
+var fs = require('fs');
 
 
 var multer = require('multer');
@@ -212,13 +213,13 @@ app.get('/upload', function(req, res, next){
 
 
 //article upload handler
-app.post('/uploadArticle', function(req, res, next){
+app.post('/uploadArticle', upload.single('articlePic'),function(req, res, next){
 	
 	//article validation rules
 	req.checkBody('articleText', 'Article text field cannot be empty.').notEmpty();
 	req.checkBody('articleDescript', 'Article discription field cannot be empty.').notEmpty();
 	req.checkBody('date', 'Date field cannot be empty.').notEmpty();
-	req.checkBody('pic', 'Must upload a picture.').notEmpty();
+	
 	
 	//check for errors
 	
@@ -242,10 +243,60 @@ app.post('/uploadArticle', function(req, res, next){
 	}
 	else{
 		const author = req.body.author;
+		
+		//console.log(author);
+		
+		const title = req.body.articleTitle;
 		const articleText = req.body.articleText;
 		const articleDescript = req.body.articleDescript;
 		const date = req.body.date;
-		const pic = req.body.pic;
+		const pic = req.file.filename;
+		
+		/*
+		console.log(title);
+		console.log(articleText);
+		console.log(articleDescript);
+		console.log(date);
+		console.log(pic);
+		*/
+
+		
+		connection.query("SELECT author.id FROM author WHERE author.name = '" + author +"';"  , function(error,results,field){
+			
+			if(error){
+				console.log(error.code);
+				
+			}else{
+				
+				console.log('Results:');
+				var authorID = results[0].id;
+				console.log(authorID);
+				
+				var articleStorageName = Math.random().toString(36).substr(2, 9)+ '-' + title + ".txt";
+				
+				fs.writeFile("public/articleText/" + articleStorageName, articleText, function(err){
+				if(err){
+					return console.log(err);
+				}
+					console.log("File Saved!!1!")
+				})
+				
+				console.log("INSERT INTO article(title,id,descript,imgloc,textloc,date) VALUES('?',?,'?','?','?','?')",[title,authorID,articleDescript,pic,articleStorageName,date]);
+				
+				connection.query("INSERT INTO article(title,authorid,descript,imgloc,textloc,date) VALUES( '" + title +"', "+ authorID +", '"+articleDescript+"', '"+pic+"', '"+articleStorageName+"', '"+date + "');", function(error, results, field){
+					if(error){
+						console.log(error);
+				
+					}else{
+						
+					}
+				});
+			}
+			connection.release
+		});
+		
+		
+		res.render('uploadArticle.html');
 		
 	};
 });
@@ -318,7 +369,7 @@ app.post('/addAuthor', upload.single('Authorpic'), function(req, res, next){
 		var descrpt = req.body.authorDescript;
 		var imgPath = req.file.filename;
 		
-		connection.query('INSERT INTO author(NAME,IMGLOC,DESCRPT) VALUES(?,?,?)',[name,imgPath,descrpt], function(error,results,field){
+		connection.query('INSERT INTO author(NAME,IMGLOC,DESCRPT) VALUES(?,?,?);',[name,imgPath,descrpt], function(error,results,field){
 			
 			if(error){
 				console.log(error.code);
@@ -335,6 +386,20 @@ app.post('/addAuthor', upload.single('Authorpic'), function(req, res, next){
 	
 });
 
+
+app.get('/getArticles', function(req,res,next){
+	connection.query("SELECT * FROM ARTICLE ORDER BY id DESC LIMIT 10", function(error,results,field){
+		if(error){
+			console.log(error)
+		}else{
+			res.send(results);
+		}
+	})
+})
+
+app.get('/goToArticle/:ID', function(req, res, next){
+	
+})
 //var User = require('.../app/modles/user');
 passport.serializeUser(function(user, done) {
 	done(null, user);

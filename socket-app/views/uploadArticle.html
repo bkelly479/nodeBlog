@@ -64,13 +64,15 @@
 				</script>
 			</div>
 		
-			<form id='uploadForm' method='POST' action='/uploadArticle'>
+			<form id='uploadForm' method='POST' action='/uploadArticle' enctype="multipart/form-data">
 				
 				<p>Author: </p><select name='author' id='author' class='uploadInput'>
-					<option value='Jim'>Jim</option>
-					<option value='Bob'>Bob</option>
-					<option value='Nick'>Nick</option>
+					<option value='John'>John</option>
+					<option value='Ben'>Ben</option>
+					
 				</select>
+				
+				<p>Article Title</p><input name = 'articleTitle' id='articleTitle' class='uploadInput'></input>
 				
 				<p>Article Text:</p><textarea name='articleText' id='articleText' class='uploadInput' rows='20'></textarea>
 				
@@ -78,7 +80,7 @@
 				
 				<p>Date:</p><input type='date' name='date' id='date' class='uploadInput'>
 				
-				<p>Article Image:</p><input type='file' name='pic' id='pic' accept='image/*'>
+				<p>Article Image:</p><input type='file' name='articlePic' id='pic' accept='image/*'>
 				
 				<br>
 				<br>
